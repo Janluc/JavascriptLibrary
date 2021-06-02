@@ -7,6 +7,14 @@ function Book(author, title, pages, read) {
   this.read = read;
 }
 
+Book.prototype.updateBookRead = function() {
+  if(this.read) {
+    this.read = false;
+  } else {
+    this.read = true;
+  }
+};
+
 function addBookToLibrary(book) {
   myLibrary.push(book)
 }
@@ -27,11 +35,22 @@ function displayBooks() {
     deleteBtn.addEventListener('click', deleteBook);
     deleteBtn.textContent = 'Delete Book';
 
+    let readBtn = document.createElement('button');
+    readBtn.addEventListener('click', changeReadStatus);
+
     title.textContent = myLibrary[book].title;
     author.textContent = 'Author: ' + myLibrary[book].author;
     pages.textContent = 'Number of Pages: ' + myLibrary[book].pages;
 
-    container.append(title, author, pages, read, deleteBtn);
+    if(myLibrary[book].read) {
+      read.textContent = 'Already read';
+      readBtn.textContent = 'Not read';
+    } else {
+      read.textContent = 'Not yet read';
+      readBtn.textContent = 'Book read';
+    }
+
+    container.append(title, author, pages, read, deleteBtn, readBtn);
     content.appendChild(container);
 
     index++;
@@ -43,6 +62,13 @@ function deleteBook(event) {
   myLibrary.splice(index, 1);
   updateLibrary();
 };
+
+function changeReadStatus(event) {
+  let index = event.target.parentNode.dataset.indexNumber;
+  myLibrary[index].updateBookRead();
+  updateLibrary();
+};
+
 
 
 let newBookBtn = document.querySelector('#form-button');
