@@ -13,22 +13,37 @@ function addBookToLibrary(book) {
 
 function displayBooks() {
   let content = document.querySelector("#content");
+  let index = 0;
   for(let book in myLibrary) {
     let container = document.createElement('div');
+    container.setAttribute('data-index-number', index);
 
     let title = document.createElement('h4');
     let author = document.createElement('p');
     let pages = document.createElement('p');
     let read = document.createElement('p');
 
+    let deleteBtn = document.createElement('button');
+    deleteBtn.addEventListener('click', deleteBook);
+    deleteBtn.textContent = 'Delete Book';
+
     title.textContent = myLibrary[book].title;
     author.textContent = 'Author: ' + myLibrary[book].author;
     pages.textContent = 'Number of Pages: ' + myLibrary[book].pages;
 
-    container.append(title, author, pages, read);
+    container.append(title, author, pages, read, deleteBtn);
     content.appendChild(container);
+
+    index++;
   }
 }
+
+function deleteBook(event) {
+  let index = event.target.parentNode.dataset.indexNumber;
+  myLibrary.splice(index, 1);
+  updateLibrary();
+};
+
 
 let newBookBtn = document.querySelector('#form-button');
 
